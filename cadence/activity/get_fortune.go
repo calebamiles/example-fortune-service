@@ -8,10 +8,6 @@ import (
 	"go.uber.org/zap"
 )
 
-func init() {
-	activity.Register(GetFortune)
-}
-
 const defaultFortune = `
 Software engineering is what happens to programming when you add time and other programmers.
 

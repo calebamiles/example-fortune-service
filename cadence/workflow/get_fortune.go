@@ -8,10 +8,6 @@ import (
 	"go.uber.org/zap"
 )
 
-func init() {
-	workflow.Register(GetFortune)
-}
-
 const (
 	// TaskList is the queue to use for GetFortune execution
 	TaskList = "getFortuneTaskList"
@@ -30,10 +26,11 @@ func GetFortune(ctx workflow.Context) error {
 	ctx = workflow.WithActivityOptions(ctx, ao)
 
 	future := workflow.ExecuteActivity(ctx, activity.GetFortune)
-	var result string
-	if err := future.Get(ctx, &result); err != nil {
+	var fortune string
+	if err := future.Get(ctx, &fortune); err != nil {
 		return err
 	}
-	workflow.GetLogger(ctx).Info("Done", zap.String("result", result))
+	workflow.GetLogger(ctx).Info("Done", zap.String("fortune", fortune))
+
 	return nil
 }
