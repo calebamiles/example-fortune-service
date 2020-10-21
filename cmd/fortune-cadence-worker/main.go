@@ -17,19 +17,20 @@ import (
 )
 
 const (
-	// HostPort is the location of the cadence frontend
-	HostPort = "127.0.0.1:7933"
+	// hostPort is the location of the cadence frontend
+	hostPort = "127.0.0.1:7933"
 
-	// Domain is the namespace to use
-	Domain = "hcp"
+	// domain is the namespace to use
+	domain = "hcp"
 
-	// ClientName is the name of the worker
-	ClientName = "fortune-worker"
+	// clientName is the name of the worker
+	clientName = "fortune-worker"
+
+	// cadenceService is the Cadence service to connect to
+	cadenceService = "cadence-frontend"
 )
 
 func main() {
-	cadenceService := "cadence-frontend"
-
 	config := zap.NewDevelopmentConfig()
 	config.Level.SetLevel(zapcore.InfoLevel)
 
@@ -39,14 +40,14 @@ func main() {
 		logger.Fatal("Failed to setup logger", zap.Error(err))
 	}
 
-	ch, err := tchannel.NewChannelTransport(tchannel.ServiceName(ClientName))
+	ch, err := tchannel.NewChannelTransport(tchannel.ServiceName(clientName))
 	if err != nil {
 		logger.Fatal("Failed to setup tchannel", zap.Error(err))
 	}
 	dispatcher := yarpc.NewDispatcher(yarpc.Config{
-		Name: ClientName,
+		Name: clientName,
 		Outbounds: yarpc.Outbounds{
-			cadenceService: {Unary: ch.NewSingleOutbound(HostPort)},
+			cadenceService: {Unary: ch.NewSingleOutbound(hostPort)},
 		},
 	})
 
@@ -56,8 +57,6 @@ func main() {
 
 	thriftService := workflowserviceclient.New(dispatcher.ClientConfig(cadenceService))
 
-	// TaskListName identifies set of client workflows, activities, and workers.
-	// It could be your group or client or application name.
 	workerOptions := worker.Options{
 		Logger:       logger,
 		MetricsScope: tally.NewTestScope(workflow.TaskList, map[string]string{}),
@@ -65,7 +64,7 @@ func main() {
 
 	worker := worker.New(
 		thriftService,
-		Domain,
+		domain,
 		workflow.TaskList,
 		workerOptions,
 	)
