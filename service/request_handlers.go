@@ -45,14 +45,20 @@ func HandleGetHealthz(w http.ResponseWriter, req *http.Request) {
 	responseJSON, err := json.Marshal(response)
 	if err != nil {
 		log.Printf("error: encoding status to JSON")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	n, err := w.Write(responseJSON)
 	if err != nil {
 		log.Printf("error: writing response: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	if n != len(responseJSON) {
 		log.Printf("error: expected to write %d bytes, but only wrote %d", len(responseJSON), n)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 }
