@@ -7,8 +7,9 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/fortune", service.HandleGetFortune)
+	// Don't use Cadence backend
+	http.HandleFunc("/fortune", service.HandleGetFortuneDirect)
 	http.HandleFunc("/healthz", service.HandleGetHealthz)
 
-	http.ListenAndServe(":8090", nil)
+	http.ListenAndServe(":8080", nil)
 }

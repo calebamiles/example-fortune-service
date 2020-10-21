@@ -14,7 +14,7 @@ const (
 )
 
 // GetFortune returns a new fortune, or the default fortune
-func GetFortune(ctx workflow.Context) error {
+func GetFortune(ctx workflow.Context) (string, error) {
 	ao := workflow.ActivityOptions{
 		TaskList:               TaskList,
 		ScheduleToCloseTimeout: time.Second * 60,
@@ -28,9 +28,9 @@ func GetFortune(ctx workflow.Context) error {
 	future := workflow.ExecuteActivity(ctx, activity.GetFortune)
 	var fortune string
 	if err := future.Get(ctx, &fortune); err != nil {
-		return err
+		return "", err
 	}
 	workflow.GetLogger(ctx).Info("Done", zap.String("fortune", fortune))
 
-	return nil
+	return fortune, nil
 }
