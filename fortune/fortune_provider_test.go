@@ -1,9 +1,9 @@
-package provider_test
+package fortune_test
 
 import (
 	"os"
 
-	"github.com/calebamiles/example-fortune-service/provider"
+	"github.com/calebamiles/example-fortune-service/fortune"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -12,7 +12,7 @@ var _ = Describe("FortuneProvider", func() {
 	Describe("getting fortunes", func() {
 		Context("when fortune is availble from the OS", func() {
 			It("returns a fortune from the OS", func() {
-				f := provider.NewFortune([]byte("this isn't an interesting fortune"))
+				f := fortune.NewProvider([]byte("this isn't an interesting fortune"))
 
 				fortune, err := f.Get()
 				Expect(err).ToNot(HaveOccurred(), "expected no error when getting a fortune")
@@ -29,7 +29,7 @@ var _ = Describe("FortuneProvider", func() {
 				os.Setenv("PATH", "")
 
 				defaultFortune := []byte("this isn't an interesting fortune")
-				f := provider.NewFortune(defaultFortune)
+				f := fortune.NewProvider(defaultFortune)
 
 				fortune, err := f.Get()
 				Expect(err).ToNot(HaveOccurred(), "expected no error when getting a fortune")

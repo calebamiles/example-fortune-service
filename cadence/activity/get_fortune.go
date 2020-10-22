@@ -3,7 +3,7 @@ package activity
 import (
 	"context"
 
-	"github.com/calebamiles/example-fortune-service/provider"
+	"github.com/calebamiles/example-fortune-service/fortune"
 	"go.uber.org/cadence/activity"
 	"go.uber.org/zap"
 )
@@ -18,8 +18,8 @@ Software engineering is what happens to programming when you add time and other 
 func GetFortune(ctx context.Context) (string, error) {
 	defaultFortune := []byte(defaultFortune)
 
-	fortune := provider.NewFortune(defaultFortune)
-	txt, err := fortune.Get()
+	f := fortune.NewProvider(defaultFortune)
+	txt, err := f.Get()
 	if err != nil {
 		return "", err
 	}

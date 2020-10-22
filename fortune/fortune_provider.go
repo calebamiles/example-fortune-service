@@ -1,19 +1,19 @@
-package provider
+package fortune
 
 import (
 	"fmt"
 	"os/exec"
 )
 
-// A Fortune provides a fortune
-type Fortune interface {
+// A Provider provides a fortune
+type Provider interface {
 	// Get returns a new Fortune or an error if one cannot be found
 	Get() ([]byte, error)
 }
 
-// NewFortune returns a new Fortune provider that uses either the default fortune
+// NewProvider returns a new Fortune provider that uses either the default fortune
 // if the OS provided fortune command is not available
-func NewFortune(defaultFortune []byte) Fortune {
+func NewProvider(defaultFortune []byte) Provider {
 	_, err := exec.LookPath("fortune")
 	if err != nil {
 		return &StaticFortuneProvider{staticFortune: defaultFortune}

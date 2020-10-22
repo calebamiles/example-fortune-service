@@ -83,5 +83,5 @@ func main() {
 	http.HandleFunc("/healthz", service.HandleGetHealthz)
 
 	logger.Info("Starting HTTP server.", zap.String("service", "fortune"))
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8090", nil)
 }

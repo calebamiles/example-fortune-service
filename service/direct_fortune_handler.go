@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/calebamiles/example-fortune-service/provider"
+	"github.com/calebamiles/example-fortune-service/fortune"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -29,8 +29,8 @@ func HandleGetFortuneDirect(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	fortune := provider.NewFortune(defaultFortune)
-	rawTxt, err := fortune.Get()
+	f := fortune.NewProvider(defaultFortune)
+	rawTxt, err := f.Get()
 	if err != nil {
 		logger.Error("Failed to get fortune", zap.Error(err))
 		w.WriteHeader(http.StatusInternalServerError)
