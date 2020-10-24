@@ -77,7 +77,7 @@ func main() {
 		logger.Error("Failed to start worker", zap.Error(err))
 	}
 
-	logger.Info("Started Cadence worker.", zap.String("worker", workflow.TaskList))
+	logger.Info("Started Fortune Cadence worker.", zap.String("worker", workflow.TaskList))
 
 	http.HandleFunc("/fortune", service.HandleGetFortuneCadence)
 	http.HandleFunc("/healthz", service.HandleGetHealthz)

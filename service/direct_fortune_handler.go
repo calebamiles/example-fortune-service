@@ -39,13 +39,13 @@ func HandleGetFortuneDirect(w http.ResponseWriter, req *http.Request) {
 
 	n, err := w.Write(rawTxt)
 	if err != nil {
-		logger.Error("error: writing HandleGetFortuneDirect response: %s", zap.Error(err))
+		logger.Error("Writing HandleGetFortuneDirect response", zap.Error(err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	if n != len(rawTxt) {
-		logger.Error(fmt.Sprintf("error: expected to write %d bytes, but only wrote %d", len(rawTxt), n))
+		logger.Error(fmt.Sprintf("Expected to write %d bytes, but only wrote %d", len(rawTxt), n))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

@@ -19,7 +19,7 @@ const (
 	// hostPort is the location of the cadence frontend
 	hostPort = "127.0.0.1:7933"
 
-	// clientName is the name of the worker
+	// clientName is the name of the client
 	clientName = "get-fortune-http-handler"
 
 	// clientService is the Cadence service to connect to
@@ -78,7 +78,7 @@ func HandleGetFortuneCadence(w http.ResponseWriter, req *http.Request) {
 
 	future, err := cadence.ExecuteWorkflow(ctx, startOpts, workflow.GetFortune)
 	if err != nil {
-		logger.Error("error executing GetFortune workflow: %s", zap.Error(err))
+		logger.Error("Executing GetFortune workflow", zap.Error(err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -86,20 +86,20 @@ func HandleGetFortuneCadence(w http.ResponseWriter, req *http.Request) {
 	var fortune string
 	err = future.Get(ctx, &fortune)
 	if err != nil {
-		logger.Error("error getting GetFortune workflow result: %s", zap.Error(err))
+		logger.Error("Getting GetFortune workflow result", zap.Error(err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	n, err := w.Write([]byte(fortune))
 	if err != nil {
-		logger.Error("error: writing HandleGetFortune response: %s", zap.Error(err))
+		logger.Error("Writing HandleGetFortune response", zap.Error(err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	if n != len(fortune) {
-		logger.Error(fmt.Sprintf("error: expected to write %d bytes, but only wrote %d", len(fortune), n))
+		logger.Error(fmt.Sprintf("Expected to write %d bytes, but only wrote %d", len(fortune), n))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

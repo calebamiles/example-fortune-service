@@ -21,9 +21,10 @@ func GetFortune(ctx context.Context) (string, error) {
 	f := fortune.NewProvider(defaultFortune)
 	txt, err := f.Get()
 	if err != nil {
+		activity.GetLogger(ctx).Error("getting new fortune", zap.Error(err))
 		return "", err
 	}
 
-	activity.GetLogger(ctx).Info("GetFortune called.", zap.String("Fortune", string(txt)))
+	activity.GetLogger(ctx).Info("GetFortune called", zap.String("Fortune", string(txt)))
 	return string(txt), nil
 }

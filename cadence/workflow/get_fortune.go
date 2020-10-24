@@ -28,9 +28,11 @@ func GetFortune(ctx workflow.Context) (string, error) {
 	future := workflow.ExecuteActivity(ctx, activity.GetFortune)
 	var fortune string
 	if err := future.Get(ctx, &fortune); err != nil {
+
+		workflow.GetLogger(ctx).Error("Executing GetFortune activity", zap.Error(err))
 		return "", err
 	}
-	workflow.GetLogger(ctx).Info("Done", zap.String("fortune", fortune))
 
+	workflow.GetLogger(ctx).Info("GetFortune workflow done", zap.String("fortune", fortune))
 	return fortune, nil
 }

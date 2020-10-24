@@ -11,5 +11,5 @@ func main() {
 	http.HandleFunc("/fortune", service.HandleGetFortuneDirect)
 	http.HandleFunc("/healthz", service.HandleGetHealthz)
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8090", nil)
 }

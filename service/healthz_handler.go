@@ -22,10 +22,12 @@ func HandleGetHealthz(w http.ResponseWriter, req *http.Request) {
 	}
 
 	var response struct {
-		Status string `json:"status"`
+		Status  string `json:"status"`
+		Service string `json:"service"`
 	}
 
 	response.Status = "ok"
+	response.Service = "fortune-service"
 	responseJSON, err := json.Marshal(response)
 	if err != nil {
 		logger.Error("encoding status to JSON", zap.Error(err))
