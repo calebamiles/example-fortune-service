@@ -1,8 +1,14 @@
 package fortune
 
 import (
-	"fmt"
+	"os"
 	"os/exec"
+)
+
+const (
+	defaultBrewFortuneLocation   = "/usr/local/bin/fortune"
+	defaultUbuntuFortuneLocation = "/usr/games/fortune"
+	defaultFedoraFortuneLocation = "/usr/bin/fortune"
 )
 
 // A Provider provides a fortune
@@ -14,20 +20,31 @@ type Provider interface {
 // NewProvider returns a new Fortune provider that uses either the default fortune
 // if the OS provided fortune command is not available
 func NewProvider(defaultFortune []byte) Provider {
-	_, err := exec.LookPath("fortune")
-	if err != nil {
-		return &StaticFortuneProvider{staticFortune: defaultFortune}
-	}
-
-	return &OSFortuneProvider{}
+	return &OSFortuneProvider{defaultFortune: defaultFortune}
 }
 
 // A OSFortuneProvider uses the fortune command from the OS to return a fortune
-type OSFortuneProvider struct{}
+type OSFortuneProvider struct {
+	defaultFortune []byte
+}
 
 // Get uses the OS provided fortune function which it expects to be on the PATH
 func (p *OSFortuneProvider) Get() ([]byte, error) {
-	cmd := exec.Command("fortune")
+	var cmd *exec.Cmd
+
+	if _, existErr := os.Stat(defaultUbuntuFortuneLocation); existErr == nil {
+		cmd = exec.Command(defaultUbuntuFortuneLocation)
+	} else if _, existErr := os.Stat(defaultFedoraFortuneLocation); existErr == nil {
+		cmd = exec.Command(defaultFedoraFortuneLocation)
+	} else if _, existErr := os.Stat(defaultBrewFortuneLocation); existErr == nil {
+		cmd = exec.Command(defaultBrewFortuneLocation)
+	} else if _, pathErr := exec.LookPath("fortune"); pathErr == nil {
+		cmd = exec.Command("fortune")
+	}
+
+	if cmd == nil {
+		return p.defaultFortune, nil
+	}
 
 	fortune, err := cmd.Output()
 	if err != nil {
@@ -35,18 +52,4 @@ func (p *OSFortuneProvider) Get() ([]byte, error) {
 	}
 
 	return fortune, nil
-}
-
-// A StaticFortuneProvider returns the static fortune it was created with
-type StaticFortuneProvider struct {
-	staticFortune []byte
-}
-
-//Get returns the static fortune
-func (p *StaticFortuneProvider) Get() ([]byte, error) {
-	if len(p.staticFortune) == 0 {
-		return nil, fmt.Errorf("static fortune provider contains no fortune :-(")
-	}
-
-	return p.staticFortune, nil
 }

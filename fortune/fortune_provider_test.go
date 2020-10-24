@@ -1,8 +1,6 @@
 package fortune_test
 
 import (
-	"os"
-
 	"github.com/calebamiles/example-fortune-service/fortune"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -17,23 +15,6 @@ var _ = Describe("FortuneProvider", func() {
 				fortune, err := f.Get()
 				Expect(err).ToNot(HaveOccurred(), "expected no error when getting a fortune")
 				Expect(fortune).ToNot(BeEmpty())
-			})
-		})
-
-		Context("when fortune is not available from the OS", func() {
-			It("returns the default fortune", func() {
-				oldPath := os.Getenv("PATH")
-				defer os.Setenv("PATH", oldPath)
-
-				// Clear the PATH
-				os.Setenv("PATH", "")
-
-				defaultFortune := []byte("this isn't an interesting fortune")
-				f := fortune.NewProvider(defaultFortune)
-
-				fortune, err := f.Get()
-				Expect(err).ToNot(HaveOccurred(), "expected no error when getting a fortune")
-				Expect(fortune).To(Equal(fortune))
 			})
 		})
 	})
