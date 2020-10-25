@@ -93,7 +93,7 @@ func HandleGetFortuneCadence(w http.ResponseWriter, req *http.Request) {
 
 	n, err := w.Write([]byte(fortune))
 	if err != nil {
-		logger.Error("Writing HandleGetFortune response", zap.Error(err))
+		logger.Error("Writing HandleGetFortuneCadence response", zap.Error(err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

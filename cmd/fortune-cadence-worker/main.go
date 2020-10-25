@@ -3,13 +3,13 @@ package main
 import (
 	"net/http"
 
-	"go.uber.org/cadence/.gen/go/cadence/workflowserviceclient"
-	"go.uber.org/cadence/worker"
-
 	"github.com/calebamiles/example-fortune-service/cadence/activity"
 	"github.com/calebamiles/example-fortune-service/cadence/workflow"
 	"github.com/calebamiles/example-fortune-service/service"
+
 	"github.com/uber-go/tally"
+	"go.uber.org/cadence/.gen/go/cadence/workflowserviceclient"
+	"go.uber.org/cadence/worker"
 	"go.uber.org/yarpc"
 	"go.uber.org/yarpc/transport/tchannel"
 	"go.uber.org/zap"
