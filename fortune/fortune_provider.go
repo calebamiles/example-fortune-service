@@ -6,9 +6,9 @@ import (
 )
 
 const (
-	defaultBrewFortuneLocation   = "/usr/local/bin/fortune"
-	defaultUbuntuFortuneLocation = "/usr/games/fortune"
-	defaultFedoraFortuneLocation = "/usr/bin/fortune"
+	defaultBrewFortuneLocation   = "/tmp/usr/local/bin/fortune"
+	defaultUbuntuFortuneLocation = "/tmp/usr/games/fortune"
+	defaultFedoraFortuneLocation = "/tmp/usr/bin/fortune"
 )
 
 // A Provider provides a fortune
