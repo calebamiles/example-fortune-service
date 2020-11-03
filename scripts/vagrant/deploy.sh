@@ -99,10 +99,9 @@ FORTUNE_NOMAD_JOB
 nomad job run ${job_dir}/fortune-service.nomad
 
 # Check deployment
-sleep 10s
-nomad status fortune-service
-
 curl --connect-timeout 5 --max-time 10 --retry 10 --retry-max-time 60 --retry-connrefused http://127.0.0.1:8090/healthz
+nomad status fortune-service
 
 # Cleanup
 rm -rf ${work_dir}
+
